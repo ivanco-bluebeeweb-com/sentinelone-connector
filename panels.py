@@ -26,18 +26,18 @@ async def sentinelone_sidebar(ctx, **kwargs) -> ui.UINode:
         return ui.Stack(direction="v", gap=3, align="stretch", children=[
             ui.Button("Где взять API token?", variant="ghost", size="sm", icon="HelpCircle",
                       on_click=ui.Call("__panel__sentinelone_connect_help")),
-            ui.Form(action="connect_sentinelone", submit_label="Подключить тенант", full_width=True, children=[
+            ui.Form(action="connect_sentinelone", submit_label="Подключить тенант", children=[
                 ui.Stack(direction="v", gap=1, align="stretch", children=[
                     ui.Text("Название (опционально)", variant="label"),
-                    ui.Input(name="label", placeholder="Acme SOC Tenant"),
+                    ui.Input(param_name="label", placeholder="Acme SOC Tenant"),
                 ]),
                 ui.Stack(direction="v", gap=1, align="stretch", children=[
                     ui.Text("Console URL", variant="label"),
-                    ui.Input(name="console_url", placeholder="https://usea1-acme.sentinelone.net"),
+                    ui.Input(param_name="console_url", placeholder="https://usea1-acme.sentinelone.net"),
                 ]),
                 ui.Stack(direction="v", gap=1, align="stretch", children=[
                     ui.Text("API Token", variant="label"),
-                    ui.Input(name="api_token", type="password", placeholder="Вставьте API token"),
+                    ui.Password(param_name="api_token", placeholder="Вставьте API token"),
                 ]),
             ]),
         ])
@@ -59,7 +59,7 @@ async def sentinelone_sidebar(ctx, **kwargs) -> ui.UINode:
 
 @ext.panel("sentinelone_connect_help", slot="overlay", title="Где взять API token?")
 async def sentinelone_connect_help(ctx, **kwargs) -> ui.UINode:
-    return ui.Markdown(text=(
+    return ui.Markdown(content=(
         "**Как получить API Token SentinelOne:**\n\n"
         "1. Откройте Management Console вашего тенанта.\n"
         "2. Перейдите в **Settings > Users**.\n"

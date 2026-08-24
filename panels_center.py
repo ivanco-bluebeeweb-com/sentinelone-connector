@@ -12,8 +12,8 @@ import sentinelone_client as sc
 
 def _confidence_badge(level: str) -> ui.UINode:
     s = (level or "").lower()
-    variant = "error" if s == "malicious" else ("warning" if s == "suspicious" else "default")
-    return ui.Badge(text=level or "unknown", variant=variant)
+    color = "red" if s == "malicious" else ("yellow" if s == "suspicious" else "gray")
+    return ui.Badge(label=level or "unknown", color=color)
 
 
 @ext.panel("sentinelone_threats", slot="center", title="Threats", center_overlay=True)
