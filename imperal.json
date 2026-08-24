@@ -1,0 +1,2783 @@
+{
+  "manifest_schema_version": 3,
+  "sdk_version": "5.11.0",
+  "app_id": "sentinelone-connector",
+  "version": "0.1.0",
+  "name": "SentinelOne",
+  "description": "Connect your own SentinelOne Singularity tenant to manage Agents (isolate/reconnect, scan), Threats (mitigate: kill/quarantine/remediate/rollback), Exclusions, Sites/Groups, and Deep Visibility threat hunting queries.",
+  "icon": "icon.svg",
+  "actions_explicit": true,
+  "system": false,
+  "capabilities": [
+    "sentinelone:read",
+    "sentinelone:write"
+  ],
+  "tools": [
+    {
+      "name": "connect_sentinelone",
+      "description": "Connect your own SentinelOne Singularity tenant (Management Console URL + API Token), verifying the credentials with a real call before saving.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "sentinelone.connection.created"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "label": {
+            "default": "",
+            "description": "Optional friendly name for this connection.",
+            "title": "Label",
+            "type": "string"
+          },
+          "console_url": {
+            "description": "Management Console URL, e.g. https://usea1-acme.sentinelone.net.",
+            "title": "Console Url",
+            "type": "string"
+          },
+          "api_token": {
+            "description": "API Token from Settings > Users > Generate API Token.",
+            "title": "Api Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "console_url",
+          "api_token"
+        ],
+        "title": "ConnectSentinelOneParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "default": "",
+            "title": "Id",
+            "type": "string"
+          },
+          "title": {
+            "default": "",
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connected": {
+            "default": false,
+            "title": "Connected",
+            "type": "boolean"
+          },
+          "detail": {
+            "default": "",
+            "title": "Detail",
+            "type": "string"
+          },
+          "console_url": {
+            "default": "",
+            "title": "Console Url",
+            "type": "string"
+          }
+        },
+        "title": "ProviderConnection",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.connect_sentinelone",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "list_connections",
+      "description": "List the connected SentinelOne tenants.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "description": "Explicit empty params model -- V17 disallows untyped handlers.",
+        "properties": {},
+        "title": "NoParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ProviderConnection": {
+            "properties": {
+              "id": {
+                "default": "",
+                "title": "Id",
+                "type": "string"
+              },
+              "title": {
+                "default": "",
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "connected": {
+                "default": false,
+                "title": "Connected",
+                "type": "boolean"
+              },
+              "detail": {
+                "default": "",
+                "title": "Detail",
+                "type": "string"
+              },
+              "console_url": {
+                "default": "",
+                "title": "Console Url",
+                "type": "string"
+              }
+            },
+            "title": "ProviderConnection",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "items": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/ProviderConnection"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "ProviderConnectionList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.list_connections",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "disconnect_sentinelone",
+      "description": "Disconnect a SentinelOne tenant: deletes the saved console URL/API token. Nothing in SentinelOne itself is changed.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "sentinelone.connection.deleted"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "description": "Connection id from list_connections.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "connection_id"
+        ],
+        "title": "DisconnectSentinelOneParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "default": false,
+            "title": "Deleted",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.disconnect_sentinelone",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "list_threats",
+      "description": "List SentinelOne threats on the connected tenant, optionally filtered to resolved/unresolved only.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "resolved": {
+            "default": "",
+            "description": "Filter: 'true' (resolved/mitigated), 'false' (active). Empty = all.",
+            "title": "Resolved",
+            "type": "string"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Max threats to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListThreatsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "SentinelOneThreat": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "threat_id": {
+                "default": "",
+                "title": "Threat Id",
+                "type": "string"
+              },
+              "filename": {
+                "default": "",
+                "title": "Filename",
+                "type": "string"
+              },
+              "classification": {
+                "default": "",
+                "title": "Classification",
+                "type": "string"
+              },
+              "confidence_level": {
+                "default": "",
+                "title": "Confidence Level",
+                "type": "string"
+              },
+              "mitigation_status": {
+                "default": "",
+                "title": "Mitigation Status",
+                "type": "string"
+              },
+              "agent_computer_name": {
+                "default": "",
+                "title": "Agent Computer Name",
+                "type": "string"
+              },
+              "agent_id": {
+                "default": "",
+                "title": "Agent Id",
+                "type": "string"
+              },
+              "created_at": {
+                "default": "",
+                "title": "Created At",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "title": "SentinelOneThreat",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "items": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/SentinelOneThreat"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "ThreatList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.list_threats",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "get_threat",
+      "description": "Read one SentinelOne threat in full by id.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "threat_id": {
+            "description": "Threat id from list_threats.",
+            "title": "Threat Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "threat_id"
+        ],
+        "title": "GetThreatParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "threat_id": {
+            "default": "",
+            "title": "Threat Id",
+            "type": "string"
+          },
+          "filename": {
+            "default": "",
+            "title": "Filename",
+            "type": "string"
+          },
+          "classification": {
+            "default": "",
+            "title": "Classification",
+            "type": "string"
+          },
+          "confidence_level": {
+            "default": "",
+            "title": "Confidence Level",
+            "type": "string"
+          },
+          "mitigation_status": {
+            "default": "",
+            "title": "Mitigation Status",
+            "type": "string"
+          },
+          "agent_computer_name": {
+            "default": "",
+            "title": "Agent Computer Name",
+            "type": "string"
+          },
+          "agent_id": {
+            "default": "",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "created_at": {
+            "default": "",
+            "title": "Created At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "SentinelOneThreat",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.get_threat",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "mitigate_threat",
+      "description": "Apply a mitigation action to a SentinelOne threat: kill, quarantine, remediate, rollback-remediation, or un-quarantine. rollback-remediation is DESTRUCTIVE and irreversible -- it restores the affected filesystem to its state before infection.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "sentinelone.threat.mitigated"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "threat_id": {
+            "description": "Threat id to act on.",
+            "title": "Threat Id",
+            "type": "string"
+          },
+          "action": {
+            "description": "One of: kill, quarantine, remediate, rollback-remediation, un-quarantine. rollback-remediation is DESTRUCTIVE and irreversible -- it restores the filesystem to its pre-infection state.",
+            "title": "Action",
+            "type": "string"
+          }
+        },
+        "required": [
+          "threat_id",
+          "action"
+        ],
+        "title": "MitigateThreatParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "threat_id": {
+            "default": "",
+            "title": "Threat Id",
+            "type": "string"
+          },
+          "filename": {
+            "default": "",
+            "title": "Filename",
+            "type": "string"
+          },
+          "classification": {
+            "default": "",
+            "title": "Classification",
+            "type": "string"
+          },
+          "confidence_level": {
+            "default": "",
+            "title": "Confidence Level",
+            "type": "string"
+          },
+          "mitigation_status": {
+            "default": "",
+            "title": "Mitigation Status",
+            "type": "string"
+          },
+          "agent_computer_name": {
+            "default": "",
+            "title": "Agent Computer Name",
+            "type": "string"
+          },
+          "agent_id": {
+            "default": "",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "created_at": {
+            "default": "",
+            "title": "Created At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "SentinelOneThreat",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.mitigate_threat",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "list_agents",
+      "description": "List agents (endpoints) enrolled in the connected SentinelOne tenant.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "infected_only": {
+            "default": false,
+            "description": "If true, only return agents currently flagged infected.",
+            "title": "Infected Only",
+            "type": "boolean"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Max agents to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListAgentsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "SentinelOneAgent": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "agent_id": {
+                "default": "",
+                "title": "Agent Id",
+                "type": "string"
+              },
+              "computer_name": {
+                "default": "",
+                "title": "Computer Name",
+                "type": "string"
+              },
+              "os_type": {
+                "default": "",
+                "title": "Os Type",
+                "type": "string"
+              },
+              "network_status": {
+                "default": "",
+                "title": "Network Status",
+                "type": "string"
+              },
+              "is_infected": {
+                "default": false,
+                "title": "Is Infected",
+                "type": "boolean"
+              },
+              "is_active": {
+                "default": false,
+                "title": "Is Active",
+                "type": "boolean"
+              },
+              "last_active": {
+                "default": "",
+                "title": "Last Active",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "title": "SentinelOneAgent",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "items": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/SentinelOneAgent"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "AgentList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.list_agents",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "isolate_agent",
+      "description": "Isolate a SentinelOne agent from the network (network quarantine). The agent stays protected but loses almost all network access -- confirm the target host before running.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "sentinelone.agent.isolated"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Agent id from list_agents.",
+            "title": "Agent Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "IsolateAgentParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "agent_id": {
+            "default": "",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "computer_name": {
+            "default": "",
+            "title": "Computer Name",
+            "type": "string"
+          },
+          "os_type": {
+            "default": "",
+            "title": "Os Type",
+            "type": "string"
+          },
+          "network_status": {
+            "default": "",
+            "title": "Network Status",
+            "type": "string"
+          },
+          "is_infected": {
+            "default": false,
+            "title": "Is Infected",
+            "type": "boolean"
+          },
+          "is_active": {
+            "default": false,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "last_active": {
+            "default": "",
+            "title": "Last Active",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "SentinelOneAgent",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.isolate_agent",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "reconnect_agent",
+      "description": "Reconnect a previously isolated SentinelOne agent back to the network.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "sentinelone.agent.reconnected"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Agent id from list_agents.",
+            "title": "Agent Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "ReconnectAgentParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "agent_id": {
+            "default": "",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "computer_name": {
+            "default": "",
+            "title": "Computer Name",
+            "type": "string"
+          },
+          "os_type": {
+            "default": "",
+            "title": "Os Type",
+            "type": "string"
+          },
+          "network_status": {
+            "default": "",
+            "title": "Network Status",
+            "type": "string"
+          },
+          "is_infected": {
+            "default": false,
+            "title": "Is Infected",
+            "type": "boolean"
+          },
+          "is_active": {
+            "default": false,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "last_active": {
+            "default": "",
+            "title": "Last Active",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "SentinelOneAgent",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.reconnect_agent",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "initiate_scan",
+      "description": "Trigger an on-demand full disk scan on a SentinelOne agent.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "sentinelone.agent.scanned"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Agent id from list_agents.",
+            "title": "Agent Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "InitiateScanParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "agent_id": {
+            "default": "",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "computer_name": {
+            "default": "",
+            "title": "Computer Name",
+            "type": "string"
+          },
+          "os_type": {
+            "default": "",
+            "title": "Os Type",
+            "type": "string"
+          },
+          "network_status": {
+            "default": "",
+            "title": "Network Status",
+            "type": "string"
+          },
+          "is_infected": {
+            "default": false,
+            "title": "Is Infected",
+            "type": "boolean"
+          },
+          "is_active": {
+            "default": false,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "last_active": {
+            "default": "",
+            "title": "Last Active",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "SentinelOneAgent",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.initiate_scan",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "list_exclusions",
+      "description": "List Exclusions (allowlisted hashes/paths/certificates) configured on the connected SentinelOne tenant.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Max exclusions to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListExclusionsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "SentinelOneExclusion": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "default": "",
+                "title": "Description",
+                "type": "string"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "exclusion_id": {
+                "default": "",
+                "title": "Exclusion Id",
+                "type": "string"
+              },
+              "exclusion_type": {
+                "default": "",
+                "title": "Exclusion Type",
+                "type": "string"
+              },
+              "value": {
+                "default": "",
+                "title": "Value",
+                "type": "string"
+              },
+              "mode": {
+                "default": "",
+                "title": "Mode",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "title": "SentinelOneExclusion",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "items": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/SentinelOneExclusion"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "ExclusionList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.list_exclusions",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "create_exclusion",
+      "description": "Create a new Exclusion (allowlist entry) on the connected SentinelOne tenant -- e.g. a known-good file hash or path.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "sentinelone.exclusion.created"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "exclusion_type": {
+            "description": "Exclusion type: file_type, path, certificate, hash, browser, white_hash.",
+            "title": "Exclusion Type",
+            "type": "string"
+          },
+          "value": {
+            "description": "The value to exclude, e.g. a file path or hash.",
+            "title": "Value",
+            "type": "string"
+          },
+          "mode": {
+            "default": "suppress",
+            "description": "Exclusion mode: suppress, disable_in_process_monitor_deep, disable_all_monitors, disable_all_monitors_deep.",
+            "title": "Mode",
+            "type": "string"
+          },
+          "description": {
+            "default": "",
+            "description": "Optional description of why this exclusion exists.",
+            "title": "Description",
+            "type": "string"
+          }
+        },
+        "required": [
+          "exclusion_type",
+          "value"
+        ],
+        "title": "CreateExclusionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "default": "",
+            "title": "Description",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "exclusion_id": {
+            "default": "",
+            "title": "Exclusion Id",
+            "type": "string"
+          },
+          "exclusion_type": {
+            "default": "",
+            "title": "Exclusion Type",
+            "type": "string"
+          },
+          "value": {
+            "default": "",
+            "title": "Value",
+            "type": "string"
+          },
+          "mode": {
+            "default": "",
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "SentinelOneExclusion",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.create_exclusion",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "delete_exclusion",
+      "description": "Permanently delete an Exclusion from the connected SentinelOne tenant. Cannot be undone.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "sentinelone.exclusion.deleted"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "exclusion_id": {
+            "description": "Exclusion id from list_exclusions.",
+            "title": "Exclusion Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "exclusion_id"
+        ],
+        "title": "DeleteExclusionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "default": false,
+            "title": "Deleted",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.delete_exclusion",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "run_deep_visibility_query",
+      "description": "Start a Deep Visibility query (SentinelOne's fleet-wide threat hunting engine) against the connected tenant's telemetry. Returns a query_id -- fetch results with get_deep_visibility_results once it finishes running.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "query": {
+            "description": "Deep Visibility query string, e.g. 'ProcessName contains \"powershell\"'.",
+            "title": "Query",
+            "type": "string"
+          },
+          "from_date": {
+            "default": "",
+            "description": "ISO 8601 start of the query window. Empty = last 24h.",
+            "title": "From Date",
+            "type": "string"
+          },
+          "to_date": {
+            "default": "",
+            "description": "ISO 8601 end of the query window. Empty = now.",
+            "title": "To Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "title": "RunDeepVisibilityQueryParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "default": "",
+            "title": "Status",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "query_id": {
+            "default": "",
+            "title": "Query Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "DeepVisibilityQueryRef",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.run_deep_visibility_query",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "get_deep_visibility_results",
+      "description": "Read the results of a previously started Deep Visibility query by its query_id.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "query_id": {
+            "description": "Query id from run_deep_visibility_query.",
+            "title": "Query Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query_id"
+        ],
+        "title": "GetDeepVisibilityResultsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "DeepVisibilityResultRow": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "fields_json": {
+                "default": "",
+                "title": "Fields Json",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "title": "DeepVisibilityResultRow",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "default": "",
+            "title": "Status",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "query_id": {
+            "default": "",
+            "title": "Query Id",
+            "type": "string"
+          },
+          "rows": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/DeepVisibilityResultRow"
+            },
+            "title": "Rows",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "DeepVisibilityResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.get_deep_visibility_results",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    },
+    {
+      "name": "audit_sentinelone_tenant",
+      "description": "Build one aggregated health report across the connected SentinelOne tenant: active (unresolved) threats, infected agents, and inactive agents.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Connection id; omit to use the only connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "title": "AuditSentinelOneTenantParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "AuditFinding": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "detail": {
+                "default": "",
+                "title": "Detail",
+                "type": "string"
+              },
+              "severity": {
+                "default": "",
+                "title": "Severity",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "title": "AuditFinding",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connection_id": {
+            "default": "",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "active_threats": {
+            "default": 0,
+            "title": "Active Threats",
+            "type": "integer"
+          },
+          "infected_agents": {
+            "default": 0,
+            "title": "Infected Agents",
+            "type": "integer"
+          },
+          "offline_agents": {
+            "default": 0,
+            "title": "Offline Agents",
+            "type": "integer"
+          },
+          "findings": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/AuditFinding"
+            },
+            "title": "Findings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "AuditReport",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "sentinelone-connector.audit_sentinelone_tenant",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_sentinelone-connector_chat"
+    }
+  ],
+  "signals": [],
+  "schedules": [],
+  "required_scopes": [],
+  "icon_size_bytes": 534,
+  "lifecycle": {
+    "health_check": {
+      "interval_sec": 60
+    }
+  },
+  "panels": [
+    {
+      "panel_id": "sentinelone_sidebar",
+      "slot": "left",
+      "title": "SentinelOne",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "sentinelone_connect_help",
+      "slot": "overlay",
+      "title": "Где взять API token?",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "sentinelone_threats",
+      "slot": "center",
+      "title": "Threats",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "sentinelone_agents",
+      "slot": "center",
+      "title": "Agents",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "sentinelone_exclusions",
+      "slot": "center",
+      "title": "Exclusions",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "sentinelone_settings",
+      "slot": "center",
+      "title": "SentinelOne settings",
+      "tree": {},
+      "icon": "Settings",
+      "refresh": "manual",
+      "center_overlay": true
+    }
+  ]
+}

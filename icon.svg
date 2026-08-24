@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="SentinelOne Connector">
+  <defs>
+    <linearGradient id="bg" x1="14" y1="12" x2="114" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4A00E0"/>
+      <stop offset="1" stop-color="#1A0057"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="24" fill="url(#bg)"/>
+  <circle cx="64" cy="64" r="34" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+  <circle cx="64" cy="64" r="12" fill="#FFFFFF"/>
+</svg>
