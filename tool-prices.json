@@ -1,0 +1,18 @@
+{
+  "connect_sentinelone": 0,
+  "disconnect_sentinelone": 0,
+  "list_connections": 0,
+  "list_agents": 8,
+  "list_threats": 8,
+  "get_threat": 8,
+  "list_exclusions": 8,
+  "isolate_agent": 16,
+  "reconnect_agent": 16,
+  "mitigate_threat": 16,
+  "create_exclusion": 16,
+  "delete_exclusion": 16,
+  "initiate_scan": 20,
+  "run_deep_visibility_query": 20,
+  "get_deep_visibility_results": 20,
+  "audit_sentinelone_tenant": 40
+}
