@@ -137,7 +137,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "list_connections",
@@ -330,7 +330,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "disconnect_sentinelone",
@@ -443,7 +443,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "list_threats",
@@ -688,7 +688,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "get_threat",
@@ -840,7 +840,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "mitigate_threat",
@@ -1000,7 +1000,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "list_agents",
@@ -1240,7 +1240,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "isolate_agent",
@@ -1389,7 +1389,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "reconnect_agent",
@@ -1538,7 +1538,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "initiate_scan",
@@ -1687,7 +1687,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "list_exclusions",
@@ -1899,7 +1899,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "create_exclusion",
@@ -2044,7 +2044,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "delete_exclusion",
@@ -2163,7 +2163,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "run_deep_visibility_query",
@@ -2285,7 +2285,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "get_deep_visibility_results",
@@ -2489,7 +2489,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     },
     {
       "name": "audit_sentinelone_tenant",
@@ -2712,7 +2712,7 @@
       "background": false,
       "long_running": false,
       "scopes": [],
-      "owner_chat_tool": "tool_sentinelone-connector_chat"
+      "owner_chat_tool": "sentinelone"
     }
   ],
   "signals": [],

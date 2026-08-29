@@ -48,7 +48,17 @@ ext = Extension(
     system=False,
 )
 
-chat = ChatExtension(ext)
+chat = ChatExtension(
+    ext,
+    tool_name="sentinelone",
+    description=(
+        "SentinelOne Connector -- connect your own SentinelOne Singularity "
+        "tenant via console URL plus API Token, then manage Agents "
+        "(isolate/reconnect, scan), Threats (mitigate: kill/quarantine/"
+        "remediate/rollback), Exclusions, Sites/Groups, and Deep Visibility "
+        "threat hunting queries."
+    ),
+)
 
 
 @ext.health_check
