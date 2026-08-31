@@ -30,6 +30,8 @@ class ProviderConnection(sdl.Entity):
 
 
 class ProviderConnectionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[ProviderConnection] = []
 
 
@@ -38,6 +40,8 @@ class DisconnectSentinelOneParams(BaseModel):
 
 
 class DeleteResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     deleted: bool = False
 
 
@@ -50,6 +54,8 @@ class ListThreatsParams(BaseModel):
 
 
 class SentinelOneThreat(sdl.Entity):
+    id: str = ""
+    title: str = ""
     threat_id: str = ""
     filename: str = ""
     classification: str = ""
@@ -61,6 +67,8 @@ class SentinelOneThreat(sdl.Entity):
 
 
 class ThreatList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[SentinelOneThreat] = []
 
 
@@ -84,6 +92,8 @@ class ListAgentsParams(BaseModel):
 
 
 class SentinelOneAgent(sdl.Entity):
+    id: str = ""
+    title: str = ""
     agent_id: str = ""
     computer_name: str = ""
     os_type: str = ""
@@ -94,6 +104,8 @@ class SentinelOneAgent(sdl.Entity):
 
 
 class AgentList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[SentinelOneAgent] = []
 
 
@@ -120,6 +132,8 @@ class ListExclusionsParams(BaseModel):
 
 
 class SentinelOneExclusion(sdl.Entity):
+    id: str = ""
+    title: str = ""
     exclusion_id: str = ""
     exclusion_type: str = ""
     value: str = ""
@@ -128,6 +142,8 @@ class SentinelOneExclusion(sdl.Entity):
 
 
 class ExclusionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[SentinelOneExclusion] = []
 
 
@@ -154,15 +170,21 @@ class RunDeepVisibilityQueryParams(BaseModel):
 
 
 class DeepVisibilityQueryRef(sdl.Entity):
+    id: str = ""
+    title: str = ""
     query_id: str = ""
     status: str = ""
 
 
 class DeepVisibilityResultRow(sdl.Entity):
+    id: str = ""
+    title: str = ""
     fields_json: str = ""
 
 
 class DeepVisibilityResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     query_id: str = ""
     status: str = ""
     rows: list[DeepVisibilityResultRow] = []
@@ -180,12 +202,16 @@ class AuditSentinelOneTenantParams(BaseModel):
 
 
 class AuditFinding(sdl.Entity):
+    id: str = ""
+    title: str = ""
     kind: str = ""
     detail: str = ""
     severity: str = ""
 
 
 class AuditReport(sdl.Entity):
+    id: str = ""
+    title: str = ""
     connection_id: str = ""
     active_threats: int = 0
     infected_agents: int = 0
